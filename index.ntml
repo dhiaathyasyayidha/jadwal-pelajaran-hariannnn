@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jadwal Mata Pelajaran</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #e8f5e9; /* Warna hijau soft */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(46, 125, 50, 0.15);
+            max-width: 480px;
+            width: 100%;
+            text-align: center;
+            border: 2px solid #a5d6a7;
+        }
+
+        /* Stiker Maskot Sekolah */
+        .sticker-header {
+            font-size: 48px;
+            margin-bottom: 12px;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
+        }
+
+        h2 {
+            color: #1b5e20;
+            margin-bottom: 20px;
+        }
+
+        .day-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .btn-day {
+            padding: 10px 16px;
+            font-size: 14px;
+            font-weight: 600;
+            color: #1b5e20;
+            background-color: #c8e6c9;
+            border: 2px solid #81c784;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.25s ease;
+        }
+
+        .btn-day:hover {
+            background-color: #81c784;
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .btn-day.active {
+            background-color: #2e7d32;
+            color: white;
+            border-color: #1b5e20;
+        }
+
+        .schedule-box {
+            display: none;
+            margin-top: 15px;
+            padding: 20px;
+            border-radius: 12px;
+            background-color: #f1f8e9;
+            border: 1px dashed #4caf50;
+            text-align: left;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .schedule-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #c8e6c9;
+            padding-bottom: 8px;
+            margin-bottom: 12px;
+        }
+
+        .day-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #1b5e20;
+        }
+
+        .duration-badge {
+            background-color: #2e7d32;
+            color: white;
+            font-size: 12px;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-weight: 600;
+        }
+
+        .subject-list {
+            list-style: none;
+        }
+
+        .subject-item {
+            padding: 8px 12px;
+            margin-bottom: 6px;
+            background-color: #ffffff;
+            border-radius: 8px;
+            border-left: 4px solid #66bb6a;
+            color: #2e7d32;
+            font-size: 15px;
+            font-weight: 500;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <!-- Stiker Sekolah / Edukasi -->
+        <div class="sticker-header">📚 🏫 ✏️</div>
+        <h2>Jadwal Mata Pelajaran</h2>
+
+        <!-- Pilihan Hari -->
+        <div class="day-buttons">
+            <button class="btn-day" onclick="showSchedule('Senin', this)">Senin</button>
+            <button class="btn-day" onclick="showSchedule('Selasa', this)">Selasa</button>
+            <button class="btn-day" onclick="showSchedule('Rabu', this)">Rabu</button>
+            <button class="btn-day" onclick="showSchedule('Kamis', this)">Kamis</button>
+            <button class="btn-day" onclick="showSchedule('Jumat', this)">Jumat</button>
+        </div>
+
+        <!-- Tampilan Jadwal -->
+        <div class="schedule-box" id="schedule-box">
+            <div class="schedule-header">
+                <span class="day-title" id="day-name">Hari</span>
+                <span class="duration-badge" id="duration-badge">0 Jam</span>
+            </div>
+            <ul class="subject-list" id="subject-list">
+                <!-- Daftar mata pelajaran akan dimasukkan melalui JavaScript -->
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        const scheduleData = {
+            'Senin': {
+                duration: '6 Jam Belajar',
+                subjects: ['Bahasa Jerman 🇩🇪', 'Bahasa Inggris 🇬🇧', 'Bahasa Indonesia 🇮🇩']
+            },
+            'Selasa': {
+                duration: '6 Jam Belajar',
+                subjects: ['PKN 🇮🇩', 'Matematika 📐', 'Geografi 🌍']
+            },
+            'Rabu': {
+                duration: '6 Jam Belajar',
+                subjects: ['Seni 🎨', 'Ekonomi 📊', 'Bahasa Jerman 🇩🇪']
+            },
+            'Kamis': {
+                duration: '6 Jam Belajar',
+                subjects: ['Geografi 🌍', 'Informatika 💻', 'PENDAIS 📖']
+            },
+            'Jumat': {
+                duration: '8 Jam Belajar',
+                subjects: ['Bahasa Daerah 🗣️', 'Bahasa Inggris 🇬🇧', 'Bahasa Daerah 🗣️', 'Informatika 💻']
+            }
+        };
+
+        function showSchedule(day, btnElement) {
+            // Mengubah style tombol yang aktif
+            const buttons = document.querySelectorAll('.btn-day');
+            buttons.forEach(btn => btn.classList.remove('active'));
+            btnElement.classList.add('active');
+
+            const data = scheduleData[day];
+            const scheduleBox = document.getElementById('schedule-box');
+            const dayName = document.getElementById('day-name');
+            const durationBadge = document.getElementById('duration-badge');
+            const subjectList = document.getElementById('subject-list');
+
+            // Set data hari & durasi
+            dayName.innerText = 'Hari ' + day;
+            durationBadge.innerText = data.duration;
+
+            // Render daftar mata pelajaran
+            subjectList.innerHTML = '';
+            data.subjects.forEach(subject => {
+                const li = document.createElement('li');
+                li.className = 'subject-item';
+                li.innerText = subject;
+                subjectList.appendChild(li);
+            });
+
+            scheduleBox.style.display = 'block';
+        }
+    </script>
+</body>
+</html>
